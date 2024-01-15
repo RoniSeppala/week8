@@ -8,7 +8,8 @@ router.post("/user/register",async (req,res) => {
     const existingUser = await User.findOne({ email: req.body.email });
 
     if (existingUser) {
-        return res.status(403).json({email: "Email is allready in use"})
+        res.status(403).json({email: "Email is allready in use"})
+        return
     }
     bcrypt.genSalt(10, (err,salt) => {
         bcrypt.hash(req.body.password, salt, (err,hash) => {
