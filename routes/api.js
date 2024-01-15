@@ -5,7 +5,7 @@ const User = require("../models/User");
 
 router.post("/user/register",async (req,res) => {
 
-    const existingUser = await User.findOne({ email: req.body.email });
+    const existingUser = await User.findOne({email: req.body.email});
 
     if (existingUser) {
         console.log("usererror")
