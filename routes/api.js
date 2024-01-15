@@ -5,25 +5,22 @@ const User = require("../models/User");
 
 router.post("/user/register",async (req,res) => {
     try {
-        const existingUser = await User.findOne({email: req.body.email});
-
-        if (existingUser) {
-            console.log("usererror")
-            return res.status(403).json({email: "Email is allready in use"});
-        } else {
-            bcrypt.genSalt(10, (err,salt) => {
-                bcrypt.hash(req.body.password, salt, (err,hash) => {
-                    if(err) throw err;
-                    User.create(
+        bcrypt.genSalt(10, (err,salt) => {
+            bcrypt.hash(req.body.password, salt, async (err,hash) => {
+                if(err) throw err;
+                try {
+                    await User.create(
                         {
                             email: req.body.email,
                             password: hash
                         }
                     )
-                })
-                res.send("ok").status(200)
+                    res.send("ok").status(200)
+                } catch (error) {
+                    res.status(403).json({email: "Email already in use."})
+                }
             })
-        }
+        })
     } catch (error) {
         console.log("error")
     }
