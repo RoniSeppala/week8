@@ -6,11 +6,10 @@ const User = require("../models/User");
 router.post("/user/register",async (req,res) => {
 
     const existingUser = await User.findOne({ email: req.body.email });
-    
+
     if (existingUser) {
         return res.status(403).json({email: "Email is allready in use"})
     }
-
     bcrypt.genSalt(10, (err,salt) => {
         bcrypt.hash(req.body.password, salt, (err,hash) => {
             if(err) throw err;
@@ -22,6 +21,7 @@ router.post("/user/register",async (req,res) => {
             )
         })
     })
+    res.send("ok").status(200)
 })
 
 module.exports = router;
